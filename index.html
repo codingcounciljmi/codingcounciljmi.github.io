@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,20 +8,21 @@
     <meta name="keywords" content="certificate, verification, QR code, Coding Council, JMI">
     <meta name="author" content="Coding Council JMI">
     <meta name="theme-color" content="#0f172a">
-    
+
     <!-- Open Graph -->
     <meta property="og:title" content="Certificate Verification | Coding Council JMI">
     <meta property="og:description" content="Verify the authenticity of certificates issued by Coding Council JMI">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://arshadali.site/verify/">
-    
+
     <title>Certificate Verification | Coding Council JMI</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
     <style>
         /* ===== CSS Variables ===== */
         :root {
@@ -29,38 +31,40 @@
             --bg-tertiary: #334155;
             --bg-card: rgba(30, 41, 59, 0.8);
             --bg-glass: rgba(255, 255, 255, 0.05);
-            
+
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
-            
+
             --accent-primary: #3b82f6;
             --accent-secondary: #8b5cf6;
             --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            
+
             --success: #10b981;
             --success-bg: rgba(16, 185, 129, 0.1);
             --error: #ef4444;
             --error-bg: rgba(239, 68, 68, 0.1);
             --warning: #f59e0b;
             --warning-bg: rgba(245, 158, 11, 0.1);
-            
+
             --border-color: rgba(255, 255, 255, 0.1);
             --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.3);
-            
+
             --radius-sm: 8px;
             --radius-md: 12px;
             --radius-lg: 20px;
             --radius-xl: 28px;
-            
+
             --transition-fast: 150ms ease;
             --transition-normal: 300ms ease;
             --transition-slow: 500ms ease;
         }
 
         /* ===== Reset & Base ===== */
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -84,7 +88,7 @@
             position: fixed;
             inset: 0;
             z-index: -2;
-            background: 
+            background:
                 radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
                 radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
@@ -94,7 +98,7 @@
             position: fixed;
             inset: 0;
             z-index: -1;
-            background-image: 
+            background-image:
                 linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
             background-size: 60px 60px;
@@ -133,8 +137,15 @@
         }
 
         @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.4); }
-            50% { box-shadow: 0 0 50px rgba(139, 92, 246, 0.6); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 50px rgba(139, 92, 246, 0.6);
+            }
         }
 
         .logo svg {
@@ -179,8 +190,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* ===== Loading State ===== */
@@ -200,7 +218,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .loading-content h2 {
@@ -276,9 +296,17 @@
             margin-bottom: 8px;
         }
 
-        .result-title.valid { color: var(--success); }
-        .result-title.invalid { color: var(--error); }
-        .result-title.revoked { color: var(--warning); }
+        .result-title.valid {
+            color: var(--success);
+        }
+
+        .result-title.invalid {
+            color: var(--error);
+        }
+
+        .result-title.revoked {
+            color: var(--warning);
+        }
 
         .result-subtitle {
             text-align: center;
@@ -515,8 +543,15 @@
 
         /* ===== Animations ===== */
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .card {
@@ -528,12 +563,21 @@
         }
 
         @keyframes validPop {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="bg-pattern"></div>
     <div class="bg-grid"></div>
@@ -543,7 +587,9 @@
         <header class="header">
             <div class="logo">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 12L11 14L15 10M12 3L4 7V12C4 16.4183 7.58172 21 12 21C16.4183 21 20 16.4183 20 12V7L12 3Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path
+                        d="M9 12L11 14L15 10M12 3L4 7V12C4 16.4183 7.58172 21 12 21C16.4183 21 20 16.4183 20 12V7L12 3Z"
+                        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
                 </svg>
             </div>
             <h1>Certificate Verification</h1>
@@ -567,19 +613,13 @@
                 <form id="verify-form">
                     <div class="form-group">
                         <label for="code-input">Enter Certificate Code</label>
-                        <input 
-                            type="text" 
-                            id="code-input" 
-                            class="form-input" 
-                            placeholder="e.g., CCJMI2026A001"
-                            maxlength="32"
-                            autocomplete="off"
-                            required
-                        >
+                        <input type="text" id="code-input" class="form-input" placeholder="e.g., CCJMI2026A001"
+                            maxlength="32" autocomplete="off" required>
                     </div>
                     <button type="submit" class="btn" id="verify-btn">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"/>
+                            <path
+                                d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" />
                         </svg>
                         Verify Certificate
                     </button>
@@ -589,8 +629,9 @@
             <!-- Valid Certificate State -->
             <div id="state-valid" class="state">
                 <div class="result-icon valid valid-animation">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 6L9 17L4 12"/>
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M20 6L9 17L4 12" />
                     </svg>
                 </div>
                 <h2 class="result-title valid">Certificate Verified</h2>
@@ -622,7 +663,7 @@
                         <span class="cert-value">
                             <span class="status-badge valid">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <path d="M20 6L9 17L4 12"/>
+                                    <path d="M20 6L9 17L4 12" />
                                 </svg>
                                 Valid
                             </span>
@@ -638,8 +679,9 @@
             <!-- Invalid Certificate State -->
             <div id="state-invalid" class="state">
                 <div class="result-icon invalid">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M18 6L6 18M6 6L18 18"/>
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M18 6L6 18M6 6L18 18" />
                     </svg>
                 </div>
                 <h2 class="result-title invalid">Certificate Not Found</h2>
@@ -653,8 +695,10 @@
             <!-- Revoked Certificate State -->
             <div id="state-revoked" class="state">
                 <div class="result-icon revoked">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 9V13M12 17H12.01M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"/>
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M12 9V13M12 17H12.01M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" />
                     </svg>
                 </div>
                 <h2 class="result-title revoked">Certificate Revoked</h2>
@@ -669,8 +713,10 @@
             <div id="state-error" class="state">
                 <div class="error-content">
                     <div class="result-icon invalid">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 9V13M12 17H12.01M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"/>
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path
+                                d="M12 9V13M12 17H12.01M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" />
                         </svg>
                     </div>
                     <h2 class="result-title invalid">Verification Failed</h2>
@@ -688,7 +734,8 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <p>&copy; 2026 <a href="https://github.com/codingcounciljmi" target="_blank" rel="noopener">Coding Council JMI</a></p>
+            <p>&copy; 2026 <a href="https://github.com/codingcounciljmi" target="_blank" rel="noopener">Coding Council
+                    JMI</a></p>
         </footer>
     </div>
 
@@ -697,7 +744,6 @@
         const CONFIG = {
             // IMPORTANT: Update this URL after deploying your Cloudflare Worker
             API_BASE_URL: 'https://cert-verify-api.coding-council-jmi.workers.dev',
-            // Or use custom domain: 'https://api.arshadali.site'
         };
 
         // ===== DOM Elements =====
@@ -735,7 +781,7 @@
         // ===== API Functions =====
         async function verifyCertificate(code) {
             const url = `${CONFIG.API_BASE_URL}/api/verify/${encodeURIComponent(code)}`;
-            
+
             const response = await fetch(url, {
                 method: 'GET',
                 headers: {
@@ -778,7 +824,7 @@
             elements.codeInput.value = '';
             elements.verifyBtn.disabled = false;
             showState('noCode');
-            
+
             // Update URL without code parameter
             const url = new URL(window.location.href);
             url.searchParams.delete('code');
@@ -826,12 +872,12 @@
         elements.verifyForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const code = elements.codeInput.value;
-            
+
             // Update URL with code
             const url = new URL(window.location.href);
             url.searchParams.set('code', code);
             window.history.pushState({}, '', url);
-            
+
             handleVerification(code);
         });
 
@@ -859,4 +905,5 @@
         });
     </script>
 </body>
+
 </html>
