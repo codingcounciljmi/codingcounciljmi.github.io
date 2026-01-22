@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Verify the authenticity of certificates issued by Coding Council JMI">
+    <meta name="keywords" content="certificate, verification, QR code, Coding Council, JMI">
+    <meta name="author" content="Coding Council JMI">
+    <meta name="theme-color" content="#0f172a">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Certificate Verification | Coding Council JMI">
+    <meta property="og:description" content="Verify the authenticity of certificates issued by Coding Council JMI">
+    <meta property="og:type" content="website">
+
+    <title>Certificate Verification | Coding Council JMI</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ===== CSS Variables ===== */
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --bg-card: rgba(30, 41, 59, 0.8);
+            --bg-glass: rgba(255, 255, 255, 0.05);
+
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+
+            --accent-primary: #3b82f6;
+            --accent-secondary: #8b5cf6;
+            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+
+            --success: #10b981;
+            --success-bg: rgba(16, 185, 129, 0.1);
+            --error: #ef4444;
+            --error-bg: rgba(239, 68, 68, 0.1);
+            --warning: #f59e0b;
+            --warning-bg: rgba(245, 158, 11, 0.1);
+
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 40px rgba(59, 130, 246, 0.3);
+
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+
+            --transition-fast: 150ms ease;
+            --transition-normal: 300ms ease;
+            --transition-slow: 500ms ease;
+        }
+
+        /* ===== Reset & Base ===== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ===== Background Effects ===== */
+        .bg-pattern {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+        }
+
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+        }
+
+        /* ===== Container ===== */
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 24px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* ===== Header ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 72px;
+            height: 72px;
+            background: var(--accent-gradient);
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-glow);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 0 50px rgba(139, 92, 246, 0.6);
+            }
+        }
+
+        .logo svg {
+            width: 36px;
+            height: 36px;
+            fill: white;
+        }
+
+        .header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* ===== Card ===== */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* ===== States ===== */
+        .state {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .state.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== Loading State ===== */
+        .loading-content {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        .spinner {
+            width: 56px;
+            height: 56px;
+            border: 3px solid var(--bg-tertiary);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-content h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .loading-content p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .code-display {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            background: var(--bg-glass);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            margin-top: 16px;
+            color: var(--accent-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        /* ===== Result States ===== */
+        .result-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+
+        .result-icon svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .result-icon.valid {
+            background: var(--success-bg);
+            border: 2px solid var(--success);
+        }
+
+        .result-icon.valid svg {
+            stroke: var(--success);
+        }
+
+        .result-icon.invalid {
+            background: var(--error-bg);
+            border: 2px solid var(--error);
+        }
+
+        .result-icon.invalid svg {
+            stroke: var(--error);
+        }
+
+        .result-icon.revoked {
+            background: var(--warning-bg);
+            border: 2px solid var(--warning);
+        }
+
+        .result-icon.revoked svg {
+            stroke: var(--warning);
+        }
+
+        .result-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .result-title.valid {
+            color: var(--success);
+        }
+
+        .result-title.invalid {
+            color: var(--error);
+        }
+
+        .result-title.revoked {
+            color: var(--warning);
+        }
+
+        .result-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        /* ===== Certificate Details ===== */
+        .cert-details {
+            background: var(--bg-glass);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        .cert-field {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cert-field:last-child {
+            border-bottom: none;
+        }
+
+        .cert-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .cert-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: right;
+            max-width: 60%;
+            word-break: break-word;
+        }
+
+        .cert-value.code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--accent-primary);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-badge.valid {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .status-badge.revoked {
+            background: var(--warning-bg);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .status-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ===== Error State ===== */
+        .error-content {
+            text-align: center;
+        }
+
+        .error-message {
+            background: var(--error-bg);
+            border: 1px solid var(--error);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-top: 24px;
+            color: var(--error);
+            font-size: 0.9rem;
+        }
+
+        /* ===== Input Form (No Code) ===== */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 1rem;
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--bg-glass);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            transition: var(--transition-fast);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            margin-top: 16px;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* ===== Footer ===== */
+        .footer {
+            text-align: center;
+            margin-top: 32px;
+            padding: 16px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+
+        .footer a:hover {
+            color: var(--accent-secondary);
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 480px) {
+            .container {
+                padding: 16px;
+            }
+
+            .card {
+                padding: 24px 20px;
+                border-radius: var(--radius-lg);
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .cert-field {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .cert-value {
+                text-align: left;
+                max-width: 100%;
+            }
+
+            .logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .logo svg {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        /* ===== Animations ===== */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: slideUp 0.5s ease;
+        }
+
+        .valid-animation {
+            animation: validPop 0.5s ease;
+        }
+
+        @keyframes validPop {
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-pattern"></div>
+    <div class="bg-grid"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M9 12L11 14L15 10M12 3L4 7V12C4 16.4183 7.58172 21 12 21C16.4183 21 20 16.4183 20 12V7L12 3Z"
+                        stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                </svg>
+            </div>
+            <h1>Certificate Verification</h1>
+            <p>Verify authenticity of certificates issued by Coding Council JMI</p>
+        </header>
+
+        <!-- Main Card -->
+        <main class="card">
+            <!-- Loading State -->
+            <div id="state-loading" class="state">
+                <div class="loading-content">
+                    <div class="spinner"></div>
+                    <h2>Verifying Certificate</h2>
+                    <p>Please wait while we validate your certificate...</p>
+                    <div class="code-display" id="loading-code"></div>
+                </div>
+            </div>
+
+            <!-- No Code State (Manual Input) -->
+            <div id="state-no-code" class="state">
+                <form id="verify-form">
+                    <div class="form-group">
+                        <label for="code-input">Enter Certificate Code</label>
+                        <input type="text" id="code-input" class="form-input" placeholder="e.g., CCJMI2026A001"
+                            maxlength="32" autocomplete="off" required>
+                    </div>
+                    <button type="submit" class="btn" id="verify-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" />
+                        </svg>
+                        Verify Certificate
+                    </button>
+                </form>
+            </div>
+
+            <!-- Valid Certificate State -->
+            <div id="state-valid" class="state">
+                <div class="result-icon valid valid-animation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M20 6L9 17L4 12" />
+                    </svg>
+                </div>
+                <h2 class="result-title valid">Certificate Verified</h2>
+                <p class="result-subtitle">This certificate is authentic and valid</p>
+
+                <div class="cert-details">
+                    <div class="cert-field">
+                        <span class="cert-label">Certificate Code</span>
+                        <span class="cert-value code" id="cert-code">—</span>
+                    </div>
+                    <div class="cert-field">
+                        <span class="cert-label">Recipient Name</span>
+                        <span class="cert-value" id="cert-name">—</span>
+                    </div>
+                    <div class="cert-field">
+                        <span class="cert-label">Event / Program</span>
+                        <span class="cert-value" id="cert-event">—</span>
+                    </div>
+                    <div class="cert-field">
+                        <span class="cert-label">Issued By</span>
+                        <span class="cert-value" id="cert-issuer">—</span>
+                    </div>
+                    <div class="cert-field">
+                        <span class="cert-label">Issue Date</span>
+                        <span class="cert-value" id="cert-date">—</span>
+                    </div>
+                    <div class="cert-field">
+                        <span class="cert-label">Status</span>
+                        <span class="cert-value">
+                            <span class="status-badge valid">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <path d="M20 6L9 17L4 12" />
+                                </svg>
+                                Valid
+                            </span>
+                        </span>
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    Verify Another Certificate
+                </button>
+            </div>
+
+            <!-- Invalid Certificate State -->
+            <div id="state-invalid" class="state">
+                <div class="result-icon invalid">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M18 6L6 18M6 6L18 18" />
+                    </svg>
+                </div>
+                <h2 class="result-title invalid">Certificate Not Found</h2>
+                <p class="result-subtitle" id="invalid-message">This certificate code does not exist in our records</p>
+
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    Try Another Code
+                </button>
+            </div>
+
+            <!-- Revoked Certificate State -->
+            <div id="state-revoked" class="state">
+                <div class="result-icon revoked">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M12 9V13M12 17H12.01M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" />
+                    </svg>
+                </div>
+                <h2 class="result-title revoked">Certificate Revoked</h2>
+                <p class="result-subtitle">This certificate has been revoked and is no longer valid</p>
+
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    Verify Another Certificate
+                </button>
+            </div>
+
+            <!-- Error State -->
+            <div id="state-error" class="state">
+                <div class="error-content">
+                    <div class="result-icon invalid">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path
+                                d="M12 9V13M12 17H12.01M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" />
+                        </svg>
+                    </div>
+                    <h2 class="result-title invalid">Verification Failed</h2>
+                    <p class="result-subtitle">Unable to verify the certificate at this time</p>
+                    <div class="error-message" id="error-message">
+                        An unexpected error occurred. Please try again later.
+                    </div>
+                </div>
+
+                <button class="btn btn-secondary" onclick="resetForm()">
+                    Try Again
+                </button>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 <a href="https://github.com/codingcounciljmi" target="_blank" rel="noopener">Coding Council
+                    JMI</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // ===== Configuration =====
+        const CONFIG = {
+            // IMPORTANT: Update this URL after deploying your Cloudflare Worker
+            API_BASE_URL: 'https://cert-verify-api.coding-council-jmi.workers.dev',
+        };
+
+        // ===== DOM Elements =====
+        const states = {
+            loading: document.getElementById('state-loading'),
+            noCode: document.getElementById('state-no-code'),
+            valid: document.getElementById('state-valid'),
+            invalid: document.getElementById('state-invalid'),
+            revoked: document.getElementById('state-revoked'),
+            error: document.getElementById('state-error'),
+        };
+
+        const elements = {
+            loadingCode: document.getElementById('loading-code'),
+            codeInput: document.getElementById('code-input'),
+            verifyForm: document.getElementById('verify-form'),
+            verifyBtn: document.getElementById('verify-btn'),
+            certCode: document.getElementById('cert-code'),
+            certName: document.getElementById('cert-name'),
+            certEvent: document.getElementById('cert-event'),
+            certIssuer: document.getElementById('cert-issuer'),
+            certDate: document.getElementById('cert-date'),
+            invalidMessage: document.getElementById('invalid-message'),
+            errorMessage: document.getElementById('error-message'),
+        };
+
+        // ===== State Management =====
+        function showState(stateName) {
+            Object.values(states).forEach(state => state.classList.remove('active'));
+            if (states[stateName]) {
+                states[stateName].classList.add('active');
+            }
+        }
+
+        // ===== API Functions =====
+        async function verifyCertificate(code) {
+            const url = `${CONFIG.API_BASE_URL}/api/verify/${encodeURIComponent(code)}`;
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                },
+            });
+
+            if (!response.ok && response.status !== 404) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            return response.json();
+        }
+
+        // ===== UI Functions =====
+        function displayValidCertificate(cert) {
+            elements.certCode.textContent = cert.code || '—';
+            elements.certName.textContent = cert.name || '—';
+            elements.certEvent.textContent = cert.event || '—';
+            elements.certIssuer.textContent = cert.issuer || '—';
+            elements.certDate.textContent = formatDate(cert.issued_on) || '—';
+            showState('valid');
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return null;
+            try {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('en-IN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                });
+            } catch {
+                return dateStr;
+            }
+        }
+
+        function resetForm() {
+            elements.codeInput.value = '';
+            elements.verifyBtn.disabled = false;
+            showState('noCode');
+
+            // Update URL without code parameter
+            const url = new URL(window.location.href);
+            url.searchParams.delete('code');
+            window.history.replaceState({}, '', url);
+        }
+
+        // ===== Verification Flow =====
+        async function handleVerification(code) {
+            if (!code || code.trim() === '') {
+                showState('noCode');
+                return;
+            }
+
+            // Validate code format
+            const cleanCode = code.trim().toUpperCase();
+            if (!/^[A-Z0-9]{8,32}$/.test(cleanCode)) {
+                elements.invalidMessage.textContent = 'Invalid certificate code format';
+                showState('invalid');
+                return;
+            }
+
+            // Show loading
+            elements.loadingCode.textContent = cleanCode;
+            showState('loading');
+
+            try {
+                const result = await verifyCertificate(cleanCode);
+
+                if (result.valid && result.certificate) {
+                    displayValidCertificate(result.certificate);
+                } else if (result.message && result.message.toLowerCase().includes('revoked')) {
+                    showState('revoked');
+                } else {
+                    elements.invalidMessage.textContent = result.message || 'Certificate not found in our records';
+                    showState('invalid');
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                elements.errorMessage.textContent = error.message || 'Network error. Please check your connection and try again.';
+                showState('error');
+            }
+        }
+
+        // ===== Event Listeners =====
+        elements.verifyForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const code = elements.codeInput.value;
+
+            // Update URL with code
+            const url = new URL(window.location.href);
+            url.searchParams.set('code', code);
+            window.history.pushState({}, '', url);
+
+            handleVerification(code);
+        });
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            if (code) {
+                handleVerification(code);
+            } else {
+                showState('noCode');
+            }
+        });
+
+        // ===== Initialize =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            let code = urlParams.get('code');
+
+            // Support pretty URLs: .../certificates/verify/CCJMI123
+            if (!code) {
+                const pathParts = window.location.pathname.split('/').filter(p => p);
+                const lastPart = pathParts[pathParts.length - 1];
+
+                // If the last part looks like a code and isn't 'verify' or 'index.html'
+                if (lastPart && /^[A-Z0-9]{8,32}$/i.test(lastPart) &&
+                    !['verify', 'certificates', 'index.html'].includes(lastPart.toLowerCase())) {
+                    code = lastPart;
+                }
+            }
+
+            if (code) {
+                handleVerification(code);
+            } else {
+                showState('noCode');
+            }
+        });
+    </script>
+</body>
+
+</html>
