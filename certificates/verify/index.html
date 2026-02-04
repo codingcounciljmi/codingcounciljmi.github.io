@@ -637,38 +637,8 @@
                 <h2 class="result-title valid">Certificate Verified</h2>
                 <p class="result-subtitle">This certificate is authentic and valid</p>
 
-                <div class="cert-details">
-                    <div class="cert-field">
-                        <span class="cert-label">Certificate Code</span>
-                        <span class="cert-value code" id="cert-code">—</span>
-                    </div>
-                    <div class="cert-field">
-                        <span class="cert-label">Recipient Name</span>
-                        <span class="cert-value" id="cert-name">—</span>
-                    </div>
-                    <div class="cert-field">
-                        <span class="cert-label">Event / Program</span>
-                        <span class="cert-value" id="cert-event">—</span>
-                    </div>
-                    <div class="cert-field">
-                        <span class="cert-label">Issued By</span>
-                        <span class="cert-value" id="cert-issuer">—</span>
-                    </div>
-                    <div class="cert-field">
-                        <span class="cert-label">Issue Date</span>
-                        <span class="cert-value" id="cert-date">—</span>
-                    </div>
-                    <div class="cert-field">
-                        <span class="cert-label">Status</span>
-                        <span class="cert-value">
-                            <span class="status-badge valid">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <path d="M20 6L9 17L4 12" />
-                                </svg>
-                                Valid
-                            </span>
-                        </span>
-                    </div>
+                <div class="cert-details" id="cert-details">
+                    <!-- Dynamic fields will be inserted here -->
                 </div>
 
                 <button class="btn btn-secondary" onclick="resetForm()">
@@ -761,11 +731,7 @@
             codeInput: document.getElementById('code-input'),
             verifyForm: document.getElementById('verify-form'),
             verifyBtn: document.getElementById('verify-btn'),
-            certCode: document.getElementById('cert-code'),
-            certName: document.getElementById('cert-name'),
-            certEvent: document.getElementById('cert-event'),
-            certIssuer: document.getElementById('cert-issuer'),
-            certDate: document.getElementById('cert-date'),
+            certDetails: document.getElementById('cert-details'),
             invalidMessage: document.getElementById('invalid-message'),
             errorMessage: document.getElementById('error-message'),
         };
@@ -797,19 +763,86 @@
         }
 
         // ===== UI Functions =====
+        // Field display configuration - priority order and labels
+        const fieldConfig = {
+            code: { label: 'Certificate Code', isCode: true, priority: 1 },
+            name: { label: 'Recipient Name', priority: 2 },
+            event: { label: 'Event / Program', priority: 3 },
+            issuer: { label: 'Issued By', priority: 4 },
+            issued_on: { label: 'Issue Date', isDate: true, priority: 5 },
+        };
+
         function displayValidCertificate(cert) {
-            elements.certCode.textContent = cert.code || '—';
-            elements.certName.textContent = cert.name || '—';
-            elements.certEvent.textContent = cert.event || '—';
-            elements.certIssuer.textContent = cert.issuer || '—';
-            elements.certDate.textContent = formatDate(cert.issued_on) || '—';
+            const detailsContainer = elements.certDetails;
+            detailsContainer.innerHTML = '';
+
+            // Get all fields from cert, excluding internal fields
+            const excludeFields = ['revoked', 'created_at', 'id', 'valid'];
+            const certFields = Object.keys(cert).filter(k => !excludeFields.includes(k) && cert[k]);
+
+            // Sort fields: configured fields first (by priority), then custom fields alphabetically
+            const sortedFields = certFields.sort((a, b) => {
+                const aPriority = fieldConfig[a]?.priority || 100;
+                const bPriority = fieldConfig[b]?.priority || 100;
+                if (aPriority !== bPriority) return aPriority - bPriority;
+                return a.localeCompare(b);
+            });
+
+            // Build each field
+            sortedFields.forEach(field => {
+                const config = fieldConfig[field] || {};
+                const label = config.label || formatFieldName(field);
+                let value = cert[field] || '—';
+
+                // Format date fields
+                if (config.isDate || field.includes('date') || field.includes('_on')) {
+                    value = formatDate(value) || value;
+                }
+
+                const fieldDiv = document.createElement('div');
+                fieldDiv.className = 'cert-field';
+                fieldDiv.innerHTML = `
+                    <span class="cert-label">${escapeHtml(label)}</span>
+                    <span class="cert-value${config.isCode ? ' code' : ''}">${escapeHtml(value)}</span>
+                `;
+                detailsContainer.appendChild(fieldDiv);
+            });
+
+            // Add status field at the end
+            const statusDiv = document.createElement('div');
+            statusDiv.className = 'cert-field';
+            statusDiv.innerHTML = `
+                <span class="cert-label">Status</span>
+                <span class="cert-value">
+                    <span class="status-badge valid">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M20 6L9 17L4 12" />
+                        </svg>
+                        Valid
+                    </span>
+                </span>
+            `;
+            detailsContainer.appendChild(statusDiv);
+
             showState('valid');
+        }
+
+        function formatFieldName(field) {
+            return field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+
+        function escapeHtml(text) {
+            if (text === null || text === undefined) return '';
+            const div = document.createElement('div');
+            div.textContent = String(text);
+            return div.innerHTML;
         }
 
         function formatDate(dateStr) {
             if (!dateStr) return null;
             try {
                 const date = new Date(dateStr);
+                if (isNaN(date.getTime())) return dateStr;
                 return date.toLocaleDateString('en-IN', {
                     year: 'numeric',
                     month: 'long',
